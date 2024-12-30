@@ -43,11 +43,9 @@ const router = createBrowserRouter(
         if (!response.ok) {
           return redirect("/");
         }
-        if (
-          response.headers.has("content-type") &&
-          response.headers.get("content-type") !==
-            "application/octet-stream"
-        ) {
+        const contentType =
+          response.headers.get("content-type");
+        if (contentType === "text/html") {
           return redirect("/");
         }
         const content = await response.text();

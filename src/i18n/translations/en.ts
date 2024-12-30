@@ -7,5 +7,6 @@ export default {
     unlock: "Unlock",
     unscramble: "Unscramble",
     unknownCardIdGiven: "Cannot find card with given ID",
+    contentLocked: "Locked until January 1st, 2025",
   },
 };

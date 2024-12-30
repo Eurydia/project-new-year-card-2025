@@ -11,6 +11,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { brown, yellow } from "@mui/material/colors";
 import { alpha, Box, Stack } from "@mui/system";
@@ -22,12 +23,13 @@ import { decryptDocument } from "../core/crypto";
 import { LoaderData } from "../types/loader";
 import hero from "/assets/images/hero2.jpg";
 
-// const UNLOCKED_DATE = new Date(2025, 0, 1);
+const UNLOCKED_DATE = new Date(2025, 0, 1);
 
 export const ContentView: FC = () => {
   const { content: encrypted, id } =
     useLoaderData() as LoaderData;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { palette } = useTheme();
   const [isDecrypted, setIsDecrypted] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [content, setContent] = useState(encrypted);
@@ -40,7 +42,10 @@ export const ContentView: FC = () => {
     setDialogOpen(true);
   };
 
-  const handleDecrypt = async () =>
+  const handleDecrypt = async () => {
+    if (delta > 0) {
+      return;
+    }
     decryptDocument(encrypted, id, passphrase)
       .then((ok) => {
         setContent(ok);
@@ -50,11 +55,15 @@ export const ContentView: FC = () => {
         setPassphrase("");
         setDialogOpen(false);
       });
+  };
+  const now = Date.now() / 1000;
+  const target = UNLOCKED_DATE.getTime() / 1000;
+  const delta = target - now;
 
-  // const now = Date.now() / 1000;
-  // const target = UNLOCKED_DATE.getTime() / 1000;
-  // const delta = target - now;
-
+  const fontFamily =
+    i18n.language === "en"
+      ? "ibm plex serif"
+      : "noto serif thai";
   return (
     <Fragment>
       <Box
@@ -131,18 +140,33 @@ export const ContentView: FC = () => {
                 },
               }}
             />
-            <Button
-              disableElevation
-              disableRipple
-              variant="contained"
-              onClick={handleDecrypt}
-              // disabled={delta > 0}
-              sx={{
-                maxWidth: "fit-content",
-              }}
+            <Stack
+              direction="row"
+              spacing={2}
+              useFlexGap
+              flexWrap="wrap"
+              alignItems="center"
+              justifyContent="flex-start"
             >
-              {t("unlock")}
-            </Button>
+              <Button
+                disableElevation
+                disableRipple
+                variant="contained"
+                onClick={handleDecrypt}
+                disabled={delta > 0}
+                sx={{
+                  maxWidth: "fit-content",
+                }}
+              >
+                {t("unlock")}
+              </Button>
+              <Typography
+                color={palette.secondary.dark}
+                fontFamily={fontFamily}
+              >
+                {t("contentLocked")}
+              </Typography>
+            </Stack>
           </Stack>
         </DialogContent>
       </Dialog>
@@ -159,7 +183,11 @@ export const ContentView: FC = () => {
       >
         <Tooltip
           placement="left"
-          title={<Typography>{t("unscramble")}</Typography>}
+          title={
+            <Typography fontFamily={fontFamily}>
+              {t("unscramble")}
+            </Typography>
+          }
         >
           <KeyRounded />
         </Tooltip>

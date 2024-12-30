@@ -2,6 +2,7 @@ import {
   alpha,
   Box,
   Button,
+  CircularProgress,
   Stack,
   TextField,
   Typography,
@@ -19,11 +20,20 @@ import { Form } from "react-router";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
 export const HomeView: FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { shape, palette } = useTheme();
+  const [busy, setBusy] = useState(false);
 
   const [id, setId] = useState("");
   const disabled = id.normalize().trim().length === 0;
+  const handleSubmit = () => {
+    console.log(id);
+    setBusy(true);
+    setTimeout(() => {
+      setBusy(false);
+    }, 10000);
+  };
+
   return (
     <Box
       sx={{
@@ -39,6 +49,7 @@ export const HomeView: FC = () => {
       <Form
         action="/card"
         method="get"
+        onSubmit={handleSubmit}
       >
         <Stack
           useFlexGap
@@ -59,6 +70,11 @@ export const HomeView: FC = () => {
           <Typography
             variant="h4"
             component="h1"
+            fontFamily={
+              i18n.language === "en"
+                ? "ibm plex serif"
+                : "noto serif thai"
+            }
           >
             {t("newYearCard")}
           </Typography>
@@ -97,11 +113,15 @@ export const HomeView: FC = () => {
             <Button
               disableRipple
               disableElevation
-              disabled={disabled}
+              disabled={disabled || busy}
               variant="contained"
               type="submit"
             >
-              {t("open")}
+              {busy ? (
+                <CircularProgress variant="indeterminate" />
+              ) : (
+                t("open")
+              )}
             </Button>
             <LanguageSwitcher />
           </Stack>
