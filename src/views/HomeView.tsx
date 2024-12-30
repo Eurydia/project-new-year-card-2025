@@ -2,12 +2,17 @@ import {
   alpha,
   Box,
   Button,
-  Container,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
+import {
+  amber,
+  orange,
+  pink,
+  yellow,
+} from "@mui/material/colors";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form } from "react-router";
@@ -15,90 +20,93 @@ import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
 export const HomeView: FC = () => {
   const { t } = useTranslation();
-  const { palette, shadows } = useTheme();
+  const { shape, palette } = useTheme();
 
   const [id, setId] = useState("");
   const disabled = id.normalize().trim().length === 0;
   return (
-    <Container maxWidth="md">
+    <Box
+      sx={{
+        color: palette.secondary.main,
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: `linear-gradient(to bottom right, ${yellow["50"]}, ${amber["50"]}, ${orange["100"]}, ${pink["100"]})`,
+      }}
+    >
       <Form
         action="/card"
         method="get"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          width: "100%",
-        }}
       >
-        <Box
-          width="100%"
+        <Stack
+          useFlexGap
+          padding={8}
+          spacing={2}
           sx={{
-            backdropFilter: "blur(10px)",
-            borderRadius: "25px",
-            backgroundColor: alpha("#fff", 0.4),
+            margin: "auto",
+            maxWidth: "md",
+            height: "100%",
+            padding: 8,
+            borderRadius: shape.borderRadius,
+            backgroundColor: alpha(
+              palette.secondary.light,
+              0.5
+            ),
           }}
         >
+          <Typography
+            variant="h4"
+            component="h1"
+          >
+            {t("newYearCard")}
+          </Typography>
+          <TextField
+            placeholder={t("cardId")}
+            name="id"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            fullWidth
+            slotProps={{
+              input: {
+                sx: {
+                  backgroundColor: "white",
+                  color: palette.secondary.dark,
+                },
+              },
+              htmlInput: {
+                autoCapitalize: "off",
+                autoComplete: "off",
+                autoSave: "off",
+                sx: {
+                  fontFamily: "Ubuntu Mono",
+                },
+              },
+            }}
+          />
           <Stack
             useFlexGap
-            padding={8}
-            spacing={4}
+            width="100%"
+            spacing={2}
+            direction="row"
+            flexWrap="wrap"
+            alignItems="flex-end"
+            justifyContent="space-between"
           >
-            <Typography
-              variant="h4"
-              component="h1"
+            <Button
+              disableRipple
+              disableElevation
+              disabled={disabled}
+              variant="contained"
+              type="submit"
             >
-              {t("newYearCard")}
-            </Typography>
-            <TextField
-              placeholder={t("cardId")}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              autoSave="off"
-              name="id"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              fullWidth
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: "50px",
-                    backgroundColor: "white",
-                  },
-                },
-                htmlInput: {
-                  sx: {
-                    fontFamily: "monospace",
-                  },
-                },
-              }}
-            />
-            <Stack
-              width="100%"
-              useFlexGap
-              spacing={2}
-              direction="row"
-              flexWrap="wrap"
-              alignItems="flex-start"
-              justifyContent="space-between"
-            >
-              <Button
-                disableRipple
-                disableElevation
-                disabled={disabled}
-                variant="contained"
-                type="submit"
-                size="large"
-              >
-                {t("open")}
-              </Button>
-              <LanguageSwitcher />
-            </Stack>
+              {t("open")}
+            </Button>
+            <LanguageSwitcher />
           </Stack>
-        </Box>
+        </Stack>
       </Form>
-    </Container>
+    </Box>
   );
 };

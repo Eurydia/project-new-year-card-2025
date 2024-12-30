@@ -1,8 +1,4 @@
-import {
-  CssBaseline,
-  GlobalStyles,
-  ThemeProvider,
-} from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { FC } from "react";
 import {
   createBrowserRouter,
@@ -17,7 +13,7 @@ import { theme } from "./theme";
 const router = createBrowserRouter(
   [
     {
-      index: true,
+      path: "/",
       element: <HomeView />,
     },
     {
@@ -25,10 +21,10 @@ const router = createBrowserRouter(
       loader: ({ request }) => {
         const url = new URL(request.url);
         const queryParam = url.searchParams;
-        if (queryParam.has("id")) {
-          return redirect(`/card/${queryParam.get("id")!}`);
+        if (!queryParam.has("id")) {
+          return redirect("/");
         }
-        return redirect("/");
+        return redirect(`/card/${queryParam.get("id")!}`);
       },
     },
     {
@@ -39,43 +35,61 @@ const router = createBrowserRouter(
         if (id === undefined) {
           return redirect("/");
         }
-        const request = await fetch(
-          `/project-new-year-card-2024/assets/content/${id}.md`
+        const response = await fetch(
+          `${
+            import.meta.env.BASE_URL
+          }assets/content/${id}.enc`
         );
-        if (!request.ok) {
+        if (!response.ok) {
           return redirect("/");
         }
-        const content = await request.text();
-        console.log(content);
+        if (
+          response.headers.has("content-type") &&
+          response.headers.get("content-type") !==
+            "application/octet-stream"
+        ) {
+          return redirect("/");
+        }
+        const content = await response.text();
         const loaderData: LoaderData = {
+          id,
           content,
         };
         return loaderData;
       },
     },
+    {
+      path: "*",
+      loader: () => {
+        return redirect("/");
+      },
+    },
   ],
   {
-    basename: "/project-new-year-card-2024/",
+    basename: "/project-new-year-card-2025/",
   }
 );
 
 export const App: FC = () => {
+  // const [content, setContent] = useState("");
+  // useEffect(() => {
+  //   (async () => {
+  //     const c = await fetch(qq);
+  //     const t = await c.text();
+  //     setContent(t);
+
+  //     const { encryptedDocument, iv } =
+  //       await encryptDocument(t, "to-my-favourite-co-lead");
+  //     console.log(JSON.stringify(iv));
+  //     console.log(JSON.stringify(encryptedDocument));
+  //   })();
+  // }, []);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <GlobalStyles
-        styles={{
-          body: {
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundImage:
-              "url(/project-new-year-card-2024/img.jpg)",
-            // background: `linear-gradient(to bottom right, ${yellow["100"]}, ${yellow["100"]}, ${orange["100"]},${orange["100"]},  ${red["100"]})`,
-
-            // backgroundColor: red["50"],
-          },
-        }}
-      />
+      {/* <Container maxWidth="md">
+        <StyledMarkdown>{content}</StyledMarkdown>
+      </Container> */}
       <RouterProvider router={router} />
     </ThemeProvider>
   );

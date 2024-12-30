@@ -13,7 +13,7 @@ i18n
     detection: {
       lookupLocalStorage: "language",
     },
-    debug: true,
+    // debug: true,
     interpolation: {
       escapeValue: false,
     },
