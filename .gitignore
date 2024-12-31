@@ -25,3 +25,7 @@ dist-ssr
 /public/assets/content/raw
 /content
 /raw
+/content-en
+/content-th
+qq.js
+*.js

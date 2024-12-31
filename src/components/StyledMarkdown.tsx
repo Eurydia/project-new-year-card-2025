@@ -1,6 +1,5 @@
 import { Box, styled } from "@mui/material";
 import { FC } from "react";
-import { useTranslation } from "react-i18next";
 import Markdown, { Components } from "react-markdown";
 
 const StyledP = styled("p")({
@@ -21,18 +20,11 @@ export const StyledMarkdown: FC<StyledMarkdownProps> = (
   props
 ) => {
   const { children } = props;
-  const { i18n } = useTranslation();
-
-  const fontFamily =
-    i18n.language === "en"
-      ? "ibm plex serif"
-      : "noto serif thai";
 
   return (
     <Box
       overflow="auto"
       sx={{
-        fontFamily,
         wordWrap: "break-word",
         whiteSpace: "wrap",
       }}

@@ -28,7 +28,7 @@ const UNLOCKED_DATE = new Date(2025, 0, 1);
 export const ContentView: FC = () => {
   const { content: encrypted, id } =
     useLoaderData() as LoaderData;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { palette } = useTheme();
   const [isDecrypted, setIsDecrypted] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -44,6 +44,7 @@ export const ContentView: FC = () => {
 
   const handleDecrypt = async () => {
     if (delta > 0) {
+      console.log(delta);
       return;
     }
     decryptDocument(encrypted, id, passphrase)
@@ -60,10 +61,6 @@ export const ContentView: FC = () => {
   const target = UNLOCKED_DATE.getTime() / 1000;
   const delta = target - now;
 
-  const fontFamily =
-    i18n.language === "en"
-      ? "ibm plex serif"
-      : "noto serif thai";
   return (
     <Fragment>
       <Box
@@ -160,10 +157,7 @@ export const ContentView: FC = () => {
               >
                 {t("unlock")}
               </Button>
-              <Typography
-                color={palette.secondary.dark}
-                fontFamily={fontFamily}
-              >
+              <Typography color={palette.secondary.dark}>
                 {t("contentLocked")}
               </Typography>
             </Stack>
@@ -183,11 +177,7 @@ export const ContentView: FC = () => {
       >
         <Tooltip
           placement="left"
-          title={
-            <Typography fontFamily={fontFamily}>
-              {t("unscramble")}
-            </Typography>
-          }
+          title={<Typography>{t("unscramble")}</Typography>}
         >
           <KeyRounded />
         </Tooltip>

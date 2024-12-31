@@ -69,25 +69,9 @@ const router = createBrowserRouter(
 );
 
 export const App: FC = () => {
-  // const [content, setContent] = useState("");
-  // useEffect(() => {
-  //   (async () => {
-  //     const c = await fetch(qq);
-  //     const t = await c.text();
-  //     setContent(t);
-
-  //     const { encryptedDocument, iv } =
-  //       await encryptDocument(t, "to-my-favourite-co-lead");
-  //     console.log(JSON.stringify(iv));
-  //     console.log(JSON.stringify(encryptedDocument));
-  //   })();
-  // }, []);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* <Container maxWidth="md">
-        <StyledMarkdown>{content}</StyledMarkdown>
-      </Container> */}
       <RouterProvider router={router} />
     </ThemeProvider>
   );

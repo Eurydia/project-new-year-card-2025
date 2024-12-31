@@ -2,7 +2,10 @@ import { createTheme } from "@mui/material";
 import { brown, yellow } from "@mui/material/colors";
 
 const _theme = createTheme({
-  typography: { fontSize: 16 },
+  typography: {
+    fontSize: 16,
+    fontFamily: "noto serif thai",
+  },
   palette: {
     primary: {
       dark: "#3f2f9d",

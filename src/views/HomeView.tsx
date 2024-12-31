@@ -20,14 +20,13 @@ import { Form } from "react-router";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
 export const HomeView: FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { shape, palette } = useTheme();
   const [busy, setBusy] = useState(false);
 
   const [id, setId] = useState("");
   const disabled = id.normalize().trim().length === 0;
   const handleSubmit = () => {
-    console.log(id);
     setBusy(true);
     setTimeout(() => {
       setBusy(false);
@@ -70,11 +69,6 @@ export const HomeView: FC = () => {
           <Typography
             variant="h4"
             component="h1"
-            fontFamily={
-              i18n.language === "en"
-                ? "ibm plex serif"
-                : "noto serif thai"
-            }
           >
             {t("newYearCard")}
           </Typography>
