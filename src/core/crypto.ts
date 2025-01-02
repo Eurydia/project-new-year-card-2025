@@ -1,3 +1,9 @@
+const ivToHex = (iv: Uint8Array<ArrayBuffer>) => {
+  return Array.from(iv)
+    .map((byte) => byte.toString(16).padStart(2, "0")) // Convert each byte to hex and pad to 2 digits
+    .join(""); // Combine into a single string
+};
+
 const hexToUint8Array = (hexIv: string) => {
   const length = hexIv.length;
   const uint8Array = new Uint8Array(length / 2);
@@ -41,7 +47,7 @@ export const encryptDocument = async (
     encryptedDocument: btoa(
       String.fromCharCode(...new Uint8Array(encryptedData))
     ),
-    iv: btoa(String.fromCharCode(...iv)),
+    iv: ivToHex(iv),
   };
 };
 
