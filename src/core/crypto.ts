@@ -1,4 +1,4 @@
-const ivToHex = (iv: Uint8Array<ArrayBuffer>) => {
+const ivToHex = (iv: Uint8Array) => {
   return Array.from(iv)
     .map((byte) => byte.toString(16).padStart(2, "0")) // Convert each byte to hex and pad to 2 digits
     .join(""); // Combine into a single string
